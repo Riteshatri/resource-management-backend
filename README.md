@@ -1,6 +1,5 @@
 <h1 id="top">🚀 Resource Management Dashboard - Complete Deployment Guide</h1>
 
-
 > **3-Tier Azure Architecture**: Frontend (React) + Backend (Python FastAPI) + Azure SQL Database
 
 This guide will take you from **ZERO to FULL PRODUCTION** deployment on Azure VMs. Follow step-by-step!
