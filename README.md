@@ -5,6 +5,22 @@
 
 This guide will take you from **ZERO to FULL PRODUCTION** deployment on Azure VMs. Follow step-by-step!
 
+> **Complete Documentation & Deployment Guide for 3-Tier Architecture with Azure SQL Database**
+> **This folder contains all SQL scripts required to set up the Azure SQL Database for the Resource Management Dashboard.**
+
+[![Deploy Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge)](https://github.com/Riteshatri)
+[![React](https://img.shields.io/badge/React-18.3-61dafb?style=for-the-badge&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
+[![Azure](https://img.shields.io/badge/Azure%20SQL-Database-0078d4?style=for-the-badge&logo=microsoft-azure)](https://azure.microsoft.com)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+---
+
+## 🌐 [📺 Live Demo →](https://riteshatri.github.io/resource-management-database/) | [📖 Full Documentation →](https://riteshatri.github.io/resource-management-database/Readme.html)
+
+> 👆👆👆 **Click above to view the live deployed application with complete setup guide**
+
+---
 ---
 
 ## 📋 Table of Contents
