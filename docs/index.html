@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📦 4 Repository Structure - Resource Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .badge-img {
+            height: 25px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .boxes-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+            margin: 30px 0;
+            justify-content: space-between;
+        }
+
+        a {
+            text-decoration: none;
+            flex: 1;
+        }
+
+        .box {
+            border-radius: 12px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .box h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .box p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .box p:nth-of-type(2) {
+            opacity: 0.95;
+        }
+
+        .box p:nth-of-type(3) {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .box-cta {
+            color: #ffd700;
+            font-weight: bold;
+            margin-top: auto;
+            padding-top: 15px;
+        }
+
+        .box-showcase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .box-frontend {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .box-backend {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .box-database {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #1a1a1a;
+        }
+
+        .box-database .box-cta {
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .boxes-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            a {
+                flex: 0 0 calc(50% - 7.5px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .boxes-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            a {
+                flex: 1;
+            }
+
+            .box {
+                padding: 20px;
+                min-height: 200px;
+            }
+
+            .box h3 {
+                font-size: 1.2rem;
+            }
+
+            .box p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Resource Management Dashboard</h1>
+            <p class="tagline">Enterprise-Grade Cloud Resource Management Platform</p>
+            <div class="badges">
+                <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=flat-square&logo=checkmark"
+                    alt="Status" class="badge-img">
+                <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square" alt="Version"
+                    class="badge-img">
+                <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"
+                    class="badge-img">
+                <img src="https://img.shields.io/badge/Build-Passing-success?style=flat-square" alt="Build"
+                    class="badge-img">
+            </div>
+        </header>
+
+        <h2 class="section-title">📦 4 Repository Structure - Choose Your Path</h2>
+
+        <div class="boxes-container">
+
+            <a href="https://riteshatri.github.io/resource-management-backend/Quick_Start.html">
+                <div class="box box-showcase">
+                    <h3>📘 Backend Setup Guide</h3>
+                    <p>Step by step to Set up the backend for the Resource Management Dashboard.</p>
+                    <p class="box-cta">👉 View Full Project →</p>
+                </div>
+            </a>
+
+            <a href="https://riteshatri.github.io/resource-management-database/Readme.html">
+                <div class="box box-showcase">
+                    <h3>📘 Full Intractive README File </h3>
+                    <p>This folder contains all SQL scripts required to set up the Azure SQL Database for the Resource
+                        Management Dashboard.</p>
+                    <p class="box-cta">👉 View Full Project →</p>
+                </div>
+            </a>
+
+
+
+
+
+
+        </div>
+        <div class="boxes-container">
+            <a href="https://github.com/Riteshatri/resource-management-frontend" target="_blank">
+                <div class="box box-frontend">
+                    <h3>⚛️ Frontend</h3>
+                    <p>React 18 + Vite + TypeScript</p>
+                    <p><strong>Dashboard • UI • Components</strong></p>
+                    <p class="box-cta">👉 Explore Frontend →</p>
+                </div>
+            </a>
+
+            <a href="https://github.com/Riteshatri/resource-management-backend" target="_blank">
+                <div class="box box-backend">
+                    <h3>🔧 Backend</h3>
+                    <p>FastAPI + Python + SQLAlchemy</p>
+                    <p><strong>APIs • Auth • RBAC</strong></p>
+                    <p class="box-cta">👉 Explore Backend →</p>
+                </div>
+            </a>
+
+            <a href="https://github.com/Riteshatri/resource-management-database" target="_blank">
+                <div class="box box-database">
+                    <h3>💾 Database</h3>
+                    <p>SQL Scripts + Azure Setup</p>
+                    <p><strong>Schema • Migrations • Seeds</strong></p>
+                    <p class="box-cta">👉 Explore Database →</p>
+                </div>
+            </a>
+        </div>
+
+
+        <div align="left"
+            style="background: linear-gradient(135deg, #4facfed7 0%, #00f1fe92 100%); border-radius: 12px; padding: 30px; margin: 25px 0;">
+            <div>
+                <h2>👨‍💻 <strong>Author</strong></h2>
+
+                <h3>
+                    <a href="https://www.linkedin.com/in/riteshatri/" target="_blank" rel="noopener noreferrer">
+                        <strong>Ritesh Sharma</strong>
+                    </a>
+                </h3>
+
+                <p><em>💼 <strong>DevOps Engineer | Cloud Architect | Azure | Terraform | CI/CD | Cloud
+                            Automation</strong></em></p>
+                <p><strong><em>Tech :</em></strong> Azure | Terraform | CI/CD (GitHub Actions | Azure DevOps) | Cloud
+                    Automation</p>
+
+                <p style="margin: 12px 0;">
+                    <a href="https://www.linkedin.com/in/riteshatri/" target="_blank" rel="noopener noreferrer"
+                        style="text-decoration: none; margin-right: 8px;">
+                        <img alt="LinkedIn"
+                            src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+                    </a>
+                    <a href="https://github.com/Riteshatri/" target="_blank" rel="noopener noreferrer"
+                        style="text-decoration: none; margin-right: 8px;">
+                        <img alt="GitHub"
+                            src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+                    </a>
+                    <img alt="GitHub followers"
+                        src="https://img.shields.io/github/followers/riteshatri?label=Follow%20Me&style=social" />
+                </p>
+
+                <hr style="border:0; border-top:1px solid rgb(103, 220, 30); margin: 18px 0;" />
+
+                <h4>All 4 Repositories:</h4>
+                <ul>
+                    <li>📘 <a href="https://github.com/Riteshatri/resource-management-project" target="_blank"
+                            rel="noopener noreferrer">resource-management-project</a> - Main showcase ⭐</li>
+                    <li>📗 <a href="https://github.com/Riteshatri/resource-management-frontend" target="_blank"
+                            rel="noopener noreferrer">resource-management-frontend</a> - React 18 + Vite ⭐</li>
+                    <li>📕 <a href="https://github.com/Riteshatri/resource-management-backend" target="_blank"
+                            rel="noopener noreferrer">resource-management-backend</a> - FastAPI + Python ⭐</li>
+                    <li>📙 <a href="https://github.com/Riteshatri/resource-management-database" target="_blank"
+                            rel="noopener noreferrer">resource-management-database</a> - SQL + Azure ⭐</li>
+                </ul>
+
+                <p><strong>⭐ Please star all 4 repositories if you found this helpful!</strong></p>
+            </div>
+        </div>
+
+
+
+        <footer>
+            <p>🚀 Resource Management Dashboard | All 4 Repositories | Built with ❤️</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">© 2025 Ritesh Sharma • DevOps Engineer | Cloud Architect
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>

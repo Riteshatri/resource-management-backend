@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Deployment Guide - Ubuntu VM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #4a5568;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: #edf2f7;
+            color: #2d3748;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+            background: #f8f9ff;
+            border-radius: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .step h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .step p {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #48bb78;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #ebf8ff;
+            border-color: #3182ce;
+            color: #2c5282;
+        }
+
+        .alert-warning {
+            background: #fffaf0;
+            border-color: #dd6b20;
+            color: #7c2d12;
+        }
+
+        .alert-success {
+            background: #f0fff4;
+            border-color: #38a169;
+            color: #22543d;
+        }
+
+        .command-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .command-list li {
+            padding: 0.75rem 1rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .card h4 {
+            color: #667eea;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .step {
+                padding: 1rem;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        .explanation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .explanation-box h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .explanation-box li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        <header>
+            <h1>🚀 Backend Deployment Guide</h1>
+            <p>Deploy FastAPI Backend on Ubuntu VM - Complete Setup</p>
+        </header>
+
+        <div class="content">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="deployment">Deployment Steps</button>
+                <button class="nav-tab" data-tab="systemd">Systemd Service</button>
+                <button class="nav-tab" data-tab="troubleshooting">Troubleshooting</button>
+                <button class="nav-tab" data-tab="commands">Quick Commands</button>
+            </div>
+
+            <div id="deployment" class="tab-content active">
+                <div class="step">
+                    <h3><span class="step-number">1</span> Connect to Backend VM</h3>
+                    <p>SSH into your Ubuntu virtual machine to begin the deployment process.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># SSH into your Ubuntu VM
+ssh user@your-backend-vm-ip
+
+# Example:
+# ssh ritesh@20.123.45.67</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">2</span> Install System Dependencies</h3>
+                    <p>Install all required system packages including Python 3.12, build tools, and database drivers.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Update package list
+sudo apt update
+
+# Install required packages
+sudo apt install -y build-essential python3.12 python3.12-venv python3-pip unixodbc-dev git
+
+# Verify Python version
+python3.12 --version
+# Should show: Python 3.12.x</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">3</span> Transfer Backend Code to VM</h3>
+                    <p>Choose one of the following methods to transfer your code:</p>
+
+                    <div class="grid">
+                        <div class="card">
+                            <h4>Option A: Using SCP</h4>
+                            <p>From your Windows PowerShell:</p>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <code>scp -r "E:\path\to\backend" user@vm-ip:"~/"</code>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h4>Option B: Using Git</h4>
+                            <p>On your Ubuntu VM:</p>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <code>cd /home/user
+git clone &lt;your-repo-url&gt;
+cd your-repo/backend</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">4</span> Create Virtual Environment</h3>
+                    <p>Set up an isolated Python environment for your dependencies.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Navigate to backend folder
+cd /home/user/backend
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate it
+source venv/bin/activate
+
+# You should see (venv) in prompt</code>
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>✓ Success Indicator:</strong> You should see <code>(venv)</code> at the beginning of your terminal prompt.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">5</span> Install Python Dependencies</h3>
+                    <p>Install all required Python packages from requirements.txt.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Make sure (venv) is active!
+pip install --upgrade pip
+pip install -r requirements.txt</code>
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>Expected Output:</strong> Successfully installed fastapi uvicorn sqlalchemy pymssql...
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">6</span> Create Environment Configuration</h3>
+                    <p>Set up your environment variables with database credentials and configuration.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Create environment file
+sudo nano .env</code>
+                    </div>
+                    <p>Add this content:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code>AZURE_SQL_SERVER=ritserver.database.windows.net
+AZURE_SQL_DATABASE=ritserver
+AZURE_SQL_USERNAME=ritserver
+AZURE_SQL_PASSWORD=Ritesh@12345
+SECRET_KEY=1f7abb32c57632c35cbf57657f20ca104d88e18dd3cb17050649b10664cd743f
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+CORS_ORIGINS=["*"]
+FRONTEND_URL=http://4.245.193.71:5000</code>
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>⚠ Important:</strong> Replace these values with your actual credentials. The SECRET_KEY shown is an example.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">7</span> Test Backend Manually First</h3>
+                    <p>Before creating a service, verify that your backend runs correctly.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Make sure you're in backend folder with venv active
+source venv/bin/activate
+python run.py</code>
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>Expected Output:</strong>
+                        <pre style="margin-top: 0.5rem; font-size: 0.85rem;">INFO:     Uvicorn running on http://0.0.0.0:8000
+✅ Server configured for: ritserver.database.windows.net
+✅ Protected admin user created: ritesh@apka.bhai
+INFO:     Application startup complete.</pre>
+                    </div>
+                    <p>Test it in another terminal:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code>curl http://localhost:8000/health
+# Should return: {"status":"healthy"}</code>
+                    </div>
+                    <div class="alert alert-info">
+                        If working, press <strong>Ctrl+C</strong> to stop. Now create systemd service!
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">8</span> Create Systemd Service</h3>
+                    <p>Set up auto-start service for production deployment.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Create service file
+sudo nano /etc/systemd/system/resource-backend.service</code>
+                    </div>
+                    <p>Add this content:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code>[Unit]
+Description=Resource Management Backend API
+After=network.target
+
+[Service]
+Type=notify
+User=ritesh
+WorkingDirectory=/home/ritesh/
+Environment="PATH=/home/ritesh/venv/bin"
+EnvironmentFile=~/.env
+ExecStart=/home/ritesh/venv/bin/gunicorn app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --timeout 120
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target</code>
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>⚠ Important:</strong> Replace <code>ritesh</code> with your actual username! Update paths accordingly.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">9</span> Install Gunicorn</h3>
+                    <p>Install the production-grade WSGI server.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code>source venv/bin/activate
+pip install gunicorn</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">10</span> Start and Enable Service</h3>
+                    <p>Activate your backend service and enable auto-start on boot.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Reload systemd
+sudo systemctl daemon-reload
+
+# Enable service (start on boot)
+sudo systemctl enable resource-backend
+
+# Start service
+sudo systemctl start resource-backend
+
+# Check status
+sudo systemctl status resource-backend</code>
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>Expected Output:</strong>
+                        <pre style="margin-top: 0.5rem; font-size: 0.85rem;">● resource-backend.service - Resource Management Backend API
+   Loaded: loaded (/etc/systemd/system/resource-backend.service; enabled)
+   Active: active (running) since ...</pre>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">11</span> Configure Firewall <span class="badge">Optional</span></h3>
+                    <p>Allow incoming connections on port 8000.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Allow port 8000
+sudo ufw allow 8000/tcp
+
+# Check firewall status
+sudo ufw status</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">12</span> Test External Access</h3>
+                    <p>Verify your backend is accessible from outside the VM.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># From your Windows laptop:
+curl http://YOUR-BACKEND-VM-IP:8000/health
+
+# Should return: {"status":"healthy"}</code>
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>🎉 Congratulations!</strong> Backend deployment complete! Your API is now running in production mode.
+                    </div>
+                </div>
+            </div>
+
+            <div id="systemd" class="tab-content">
+                <div class="explanation-box">
+                    <h4>🔥 What is Systemd Service?</h4>
+                    <p><strong>Systemd Service = Your backend app running permanently in the background</strong></p>
+                    <p>Just like Windows has "Services" (Service Manager → keeps apps running even when no user is logged in, restarts automatically, survives reboots)… ✅ Linux uses systemd services to do the same job.</p>
+                </div>
+
+                <div class="step">
+                    <h3>❓ Why Do You Need a Systemd Service?</h3>
+                    <p>If you run your backend manually like this:</p>
+                    <div class="code-block">
+                        <code>uvicorn app.main:app --host 0.0.0.0 --port 8000
+# or
+python run.py</code>
+                    </div>
+                    <p>Then these problems occur:</p>
+                    <ul class="command-list">
+                        <li>❌ Closing SSH → the app stops</li>
+                        <li>❌ Closing the terminal → the app stops</li>
+                        <li>❌ VM reboot → the app stops</li>
+                        <li>❌ App crashes → the app stops</li>
+                    </ul>
+                    <div class="alert alert-warning">
+                        <strong>⚠ Not Acceptable:</strong> This is not suitable for a production environment!
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>✔ What Systemd Gives You</h3>
+                    <p>A systemd service ensures:</p>
+                    <div class="grid">
+                        <div class="card">
+                            <h4>✓ Background Execution</h4>
+                            <p>Your app runs in daemon mode, independent of your SSH session.</p>
+                        </div>
+                        <div class="card">
+                            <h4>✓ Auto-start on Boot</h4>
+                            <p>App starts automatically when VM restarts.</p>
+                        </div>
+                        <div class="card">
+                            <h4>✓ Auto-restart on Crash</h4>
+                            <p>If the app crashes, systemd restarts it automatically.</p>
+                        </div>
+                        <div class="card">
+                            <h4>✓ Proper Logging</h4>
+                            <p>You get structured logs using journalctl.</p>
+                        </div>
+                        <div class="card">
+                            <h4>✓ Easy Management</h4>
+                            <p>Start/stop/restart like any Linux service.</p>
+                        </div>
+                        <div class="card">
+                            <h4>✓ Production Ready</h4>
+                            <p>Works exactly like Windows Services.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🧠 Service Management Commands</h3>
+                    <p>Essential commands to control your backend service:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Start the service
+sudo systemctl start resource-backend
+
+# Stop the service
+sudo systemctl stop resource-backend
+
+# Restart the service
+sudo systemctl restart resource-backend
+
+# Check service status
+sudo systemctl status resource-backend
+
+# Enable auto-start on boot
+sudo systemctl enable resource-backend
+
+# Disable auto-start
+sudo systemctl disable resource-backend
+
+# View service logs
+sudo journalctl -u resource-backend -f</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>📁 Service File Location</h3>
+                    <p>To run your backend as a service, create a file at:</p>
+                    <div class="code-block">
+                        <code>/etc/systemd/system/resource-backend.service</code>
+                    </div>
+                    <p>This is the Linux equivalent of Windows Services — simple and powerful.</p>
+                </div>
+            </div>
+
+            <div id="troubleshooting" class="tab-content">
+                <div class="step">
+                    <h3>🔍 Service Not Starting</h3>
+                    <p>Check service status and logs:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code>sudo systemctl status resource-backend
+sudo journalctl -u resource-backend -n 50</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🔍 Permission Errors</h3>
+                    <p>Verify file permissions and ownership:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Check ownership
+ls -la /home/ritesh/backend
+
+# Fix ownership if needed
+sudo chown -R ritesh:ritesh /home/ritesh/backend</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🔍 Database Connection Issues</h3>
+                    <p>Test database connectivity:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Check if .env file exists and has correct values
+cat ~/.env
+
+# Test database connection
+source venv/bin/activate
+python -c "from app.database import engine; print(engine.connect())"</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🔍 Port Already in Use</h3>
+                    <p>Check what's using port 8000:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Find process using port 8000
+sudo lsof -i :8000
+
+# Kill the process if needed
+sudo kill -9 &lt;PID&gt;</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🔍 View Live Logs</h3>
+                    <p>Monitor your application in real-time:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># Follow logs in real-time
+sudo journalctl -u resource-backend -f
+
+# View last 100 lines
+sudo journalctl -u resource-backend -n 100</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>🔍 Restart After Config Changes</h3>
+                    <p>Apply changes to service file:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <code># After editing service file
+sudo systemctl daemon-reload
+sudo systemctl restart resource-backend
+sudo systemctl status resource-backend</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="commands" class="tab-content">
+                <div class="grid">
+                    <div class="card">
+                        <h4>Service Management</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>sudo systemctl start resource-backend
+sudo systemctl stop resource-backend
+sudo systemctl restart resource-backend
+sudo systemctl status resource-backend</code>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>View Logs</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>sudo journalctl -u resource-backend -f
+sudo journalctl -u resource-backend -n 100</code>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Check Health</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>curl http://localhost:8000/health
+curl http://YOUR-VM-IP:8000/health</code>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Edit Service File</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>sudo nano /etc/systemd/system/resource-backend.service
+sudo systemctl daemon-reload</code>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Virtual Environment</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>source venv/bin/activate
+deactivate
+pip list</code>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Firewall</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <code>sudo ufw allow 8000/tcp
+sudo ufw status
+sudo ufw enable</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ for Backend Deployment | Ubuntu VM Setup Guide</p>
+        </footer>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.nav-tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
