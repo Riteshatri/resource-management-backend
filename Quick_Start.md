@@ -138,7 +138,7 @@ Type=notify
 User=ritesh
 WorkingDirectory=/home/ritesh/            # path where your all backend code is
 Environment="PATH=/home/ritesh/venv/bin"  # your virtual environment's bin folder path
-EnvironmentFile=~/.env        # path where your environment(.env) file is.
+EnvironmentFile=/home/rites/.env        # path where your environment(.env) file is.
 ExecStart=/home/ritesh/venv/bin/gunicorn app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --timeout 120
 Restart=always
 RestartSec=5
@@ -248,7 +248,7 @@ sudo ufw status
 **From your Windows laptop:**
 ```powershell
 # Test health endpoint
-curl http://YOUR-BACKEND-VM-IP:8000/health
+http://YOUR-BACKEND-VM-IP:8000/health
 
 # Should return: {"status":"healthy"}
 ```
