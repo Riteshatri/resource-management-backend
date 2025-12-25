@@ -192,7 +192,7 @@ docker tag resource-management-backend:v1 \
 Example:
 ```bash
 docker tag resource-management-backend:v1 \
-  Riteshatrikumar/resource-management-backend:v1
+  Riteshatri/resource-management-backend:v1
 ```
 
 ---
@@ -200,7 +200,7 @@ docker tag resource-management-backend:v1 \
 ## ✅ Step 4: Push to Docker Hub
 
 ```bash
-docker push Riteshatrikumar/resource-management-backend:v1
+docker push Riteshatri/resource-management-backend:v1
 ```
 
 🎉 Image Docker Hub pe live
