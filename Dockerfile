@@ -65,5 +65,10 @@ CMD ["gunicorn", "app.main:app", \
      "--timeout", "120"]
 
 
-#  docker build -t resource-management-backend .
-#  docker run -d --name resource-management-backend --env-file .env   -p 8000:8000 resource-management-backend
+#  docker build -t resource-management-backend:v1 .
+#  docker run -d --name resource-management-backend --env-file .env -p 8000:8000 resource-management-backend:v1
+
+
+# docker tag resource-management-frontend:v1 ghcr.io/riteshatri/resource-management-frontend:v1
+
+docker tag resource-management-backend:v1 ghcr.io/riteshatri/resource-management-backend:v1
