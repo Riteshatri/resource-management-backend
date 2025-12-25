@@ -77,9 +77,9 @@ sudo nano .env
 
 **Add this content:**
 ```env
-AZURE_SQL_SERVER=ritserver.database.windows.net
-AZURE_SQL_DATABASE=ritserver
-AZURE_SQL_USERNAME=ritserver
+AZURE_SQL_SERVER=ritserverri.database.windows.net
+AZURE_SQL_DATABASE=ritserverri
+AZURE_SQL_USERNAME=ritserverri
 AZURE_SQL_PASSWORD=Ritesh@12345
 SECRET_KEY=1f7abb32c57632c35cbf57657f20ca104d88e18dd3cb17050649b10664cd743f
 ALGORITHM=HS256
@@ -103,8 +103,8 @@ python run.py
 INFO:     Will watch for changes in these directories: ['/home/ritesh']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 INFO:     Started reloader process [5630] using WatchFiles
-✅ Server configured for: ritserver.database.windows.net
-✅ Using Azure SQL: ritserver.database.windows.net
+✅ Server configured for: ritserverri.database.windows.net
+✅ Using Azure SQL: ritserverri.database.windows.net
 INFO:     Started server process [5632]
 INFO:     Waiting for application startup.
 ✅ Protected admin user created: ritesh@apka.bhai
@@ -138,7 +138,7 @@ Type=notify
 User=ritesh
 WorkingDirectory=/home/ritesh/            # path where your all backend code is
 Environment="PATH=/home/ritesh/venv/bin"  # your virtual environment's bin folder path
-EnvironmentFile=/home/rites/.env        # path where your environment(.env) file is.
+EnvironmentFile=~/.env        # path where your environment(.env) file is.
 ExecStart=/home/ritesh/venv/bin/gunicorn app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --timeout 120
 Restart=always
 RestartSec=5
@@ -248,7 +248,7 @@ sudo ufw status
 **From your Windows laptop:**
 ```powershell
 # Test health endpoint
-http://YOUR-BACKEND-VM-IP:8000/health
+curl http://YOUR-BACKEND-VM-IP:8000/health
 
 # Should return: {"status":"healthy"}
 ```

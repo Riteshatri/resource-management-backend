@@ -1,0 +1,73 @@
+# -------------------------------
+# 1️⃣ Base image (Python 3.12)
+# -------------------------------
+FROM python:3.12-slim
+
+# -------------------------------
+# 2️⃣ Environment safety flags
+# -------------------------------
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# -------------------------------
+# 3️⃣ System dependencies
+# (jo tum apt install kar rahe the)
+# -------------------------------
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    unixodbc-dev \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# -------------------------------
+# 4️⃣ Create non-root user (SECURITY)
+# -------------------------------
+RUN useradd -m backenduser
+
+# -------------------------------
+# 5️⃣ Working directory
+# -------------------------------
+WORKDIR /app
+
+# -------------------------------
+# 6️⃣ Copy requirements first
+# (Docker cache optimization)
+# -------------------------------
+COPY requirements.txt .
+
+# -------------------------------
+# 7️⃣ Install Python dependencies
+# -------------------------------
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install gunicorn
+
+# -------------------------------
+# 8️⃣ Copy backend source code
+# -------------------------------
+COPY . .
+
+# -------------------------------
+# 9️⃣ Ownership + switch user
+# -------------------------------
+RUN chown -R backenduser:backenduser /app
+USER backenduser
+
+# -------------------------------
+# 🔟 Expose backend port
+# -------------------------------
+EXPOSE 8000
+
+# -------------------------------
+# 1️⃣1️⃣ Start Backend (Gunicorn + Uvicorn)
+# -------------------------------
+CMD ["gunicorn", "app.main:app", \
+     "--workers", "3", \
+     "--worker-class", "uvicorn.workers.UvicornWorker", \
+     "--bind", "0.0.0.0:8000", \
+     "--timeout", "120"]
+
+
+#  docker build -t resource-backend .
+#  docker run -d --name resource-backend --env-file .env   -p 8000:8000 resource-backend
